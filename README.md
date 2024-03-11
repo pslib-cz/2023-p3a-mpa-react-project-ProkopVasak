@@ -2,7 +2,7 @@
 
 ## Téma
 
-Tady bude krátký a úderný popis o účelu, významu, funkcionalitě...
+(Balatro)[https://store.steampowered.com/app/2379780/Balatro/]
 
 ## Odkazy pro vývoj
 
