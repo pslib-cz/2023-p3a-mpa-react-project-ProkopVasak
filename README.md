@@ -2,7 +2,7 @@
 
 ## Téma
 
-[Balatro](https://store.steampowered.com/app/2379780/Balatro/)
+### [Balatro](https://store.steampowered.com/app/2379780/Balatro/)
 Balatro je karetní hra, kde se pomocí comba snažíte porazit nepřítele. Combo se násobí pomocí bonusových karet Joker(Každý dává jiný efekt) a podle použitých karet(comba jsou stejná jako v pokeru). Každé kolo má 3 nepřátele a postupně se zvišuje obtížnost a každý třetí má speciální negativní efekt(např. že hráč má o 1 ruku na použití méně nebo třeba nemůže použít srdcové karty). Od samotné hry bych udělal několik změn, třeba nahradil shop odměnami po zabití nepřítele.
 ## Odkazy pro vývoj
 
