@@ -13,10 +13,15 @@ const Board: React.FC = () => {
     return (
         <div className={styles.board}>
             <div className={styles.sidepanel}></div>
-            <div className={styles.card_box}>
-                {randomCards.map((card) => (
-                    <Card key={card.id} card={card} />
-                ))}
+            
+            <div className={styles.box}>
+                <div className={styles.card_box}>
+                    {randomCards.map((card) => (
+                        <Card key={card.id} card={card} />
+                    ))}
+                </div>
+                
+                
             </div>
         </div>
     );
