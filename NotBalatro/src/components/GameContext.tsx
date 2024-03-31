@@ -11,8 +11,6 @@ const initialState = {
     enemy: enemy,
 };
 
-
-// Reducer pro aktualizaci stavu
 const reducer = (state: State, action: Action) => {
     switch (action.type) {
         /*case SET_PLAYER:
@@ -28,8 +26,6 @@ export const GameContext = createContext<{state: State, dispatch:React.Dispatch<
 
 const GameContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-
- 
 
     return (
         <GameContext.Provider value={{ state, dispatch }}>
