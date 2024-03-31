@@ -30,7 +30,10 @@ export enum SpecialCardEffect {
 }
 
 export enum Condition {
-
+    Spades = "Spades",
+    Hearts = "Hearts",
+    Diamonds = "Diamonds",
+    Clubs = "Clubs",
 }
 
 export enum actionType {Play}
@@ -39,10 +42,12 @@ export type Action = |{type: actionType.Play , payload: {cards: Card[]} };
 
 
 export interface Card {
+    id: number;
     type: CardType;
     value: CardNumber;
     effect: SpecialCardEffect;
     effectValue: number;
+    UrlImg: string;
 }
 
 export interface Joker{

@@ -1,0 +1,12 @@
+.card{
+    width: 100%;
+    height: auto;
+    display: grid;
+    justify-content: center;
+    align-content: center;
+}
+
+.card__img{
+    width: 100%;
+    height: auto;
+}
