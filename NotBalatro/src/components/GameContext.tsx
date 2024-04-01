@@ -21,8 +21,8 @@ const reducer = (state: State, action: Action) => {
             const values: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0];
             //spades,hearts,diamonds,clubs
             const types: number[] = [0,0,0,0];
-            const getBestCombo = () => {
-                action.cards.forEach(element => {
+            const getBestCombo = (cards: Card[] ) => {
+                cards.forEach(element => {
                     switch (element.type) {
                         case "Spades":
                             types[0]++;
@@ -78,10 +78,6 @@ const reducer = (state: State, action: Action) => {
                             values[12]++;
                             break;
                     } 
-                    
-                    console.log(values);
-                    console.log(types);
-
 
                                                              
                 });
@@ -128,7 +124,9 @@ const reducer = (state: State, action: Action) => {
                             two = true;
                         }
                     }
-                    return three && two;
+                    if (three === true && two === true) {
+                        return true;
+                    } else { return false}
                 }
 
                 const checkThreeOfAKind = () => {
@@ -190,11 +188,17 @@ const reducer = (state: State, action: Action) => {
                     return "pair"
                 }
                 
-                else return "high card";
+                return "high card";
+                
+                
             }
-
-            const combo: Combo =  Combos.find(c => c.name === getBestCombo())!;
+            action.cards.forEach(card => {
+                console.log(card.value)
+            })
+            const combo: Combo =  Combos.find(c => c.name === getBestCombo(action.cards))!;
+            console.log(getBestCombo(action.cards))
             const newEnemyScore = state.enemy.score - (combo.baseMult * combo.baseChips);
+            console.log((combo.baseChips))
             return {
                 ...state,
                 enemy: {

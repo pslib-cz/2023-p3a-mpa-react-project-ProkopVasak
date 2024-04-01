@@ -28,7 +28,12 @@ const Board: React.FC = () => {
             <div className={styles.sidepanel}>
                 <div>{state.enemy.score}</div>
             </div>
-            <button onClick={() => dispatch({ type: actionType.EVALUATE_CARDS, cards: selectedCards })}>Vyhodnotit karty</button>
+            <button className={styles.res} onClick={() => {
+                const newCards = state.player.deck.sort(() => Math.random() - 0.5).slice(0, 8);
+                setStoredCards(newCards);
+                setInitialCards(newCards);
+            }}>Vyměnit karty</button>
+            <button className={styles.hod} onClick={() => dispatch({ type: actionType.EVALUATE_CARDS, cards: selectedCards })}>Vyhodnotit karty</button>
             <div className={styles.box}>
                 <div className={styles.card_box}>
                     {initialCards.map((card) => (

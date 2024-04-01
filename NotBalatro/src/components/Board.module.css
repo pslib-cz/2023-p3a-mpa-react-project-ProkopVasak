@@ -23,3 +23,12 @@
     justify-content: space-between;
 }
 
+.res{
+    position: absolute;
+    right: 0;
+}
+.hod {
+    position: absolute;
+    right: 0;
+    top: 200px;
+}
