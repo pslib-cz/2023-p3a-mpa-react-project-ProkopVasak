@@ -7,7 +7,6 @@ const Board: React.FC = () => {
 
     const { state, dispatch } = useContext(GameContext);
 
-    // Select 8 random cards
     const randomCards = state.player.deck.sort(() => Math.random() - 0.5).slice(0, 8);
 
     return (

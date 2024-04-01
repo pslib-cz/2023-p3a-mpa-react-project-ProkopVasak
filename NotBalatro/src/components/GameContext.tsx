@@ -1,6 +1,7 @@
 import React, { PropsWithChildren, createContext, useReducer } from 'react';
 import { Player, Enemy, Card, Joker, State, Action } from './types';
 import { Pack } from "./Data";
+import { useState } from 'react';
 
 
 const player: Player = ({ deck: Pack, jokers: [] });
@@ -10,6 +11,7 @@ const initialState = {
     player: player,    
     enemy: enemy,
 };
+const [selectedCards, setSelectedCards] = useState<Card[]>([]);
 
 const reducer = (state: State, action: Action) => {
     switch (action.type) {
@@ -22,13 +24,13 @@ const reducer = (state: State, action: Action) => {
     }
 };
 
-export const GameContext = createContext<{state: State, dispatch:React.Dispatch<any>}>({state: initialState, dispatch: () => null});
+export const GameContext = createContext<{state: State, dispatch:React.Dispatch<any>,selectedCards: Card[] , setSelectedCards: React.Dispatch<any>}>({state: initialState, dispatch: () => null, selectedCards: [] , setSelectedCards: setSelectedCards});
 
 const GameContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     return (
-        <GameContext.Provider value={{ state, dispatch }}>
+        <GameContext.Provider value={{ state, dispatch, selectedCards, setSelectedCards }}>
             {children}
         </GameContext.Provider>
     );
