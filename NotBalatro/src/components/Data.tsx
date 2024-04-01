@@ -1,4 +1,4 @@
-import { Card, CardNumber, CardType, Joker, SpecialCardEffect, Condition } from './types';
+import { Card, CardNumber, CardType, Joker, SpecialCardEffect, Condition, Combo } from './types';
 
 export const Pack: Card[] = [
     { id: 1, type: CardType.Spades, value: CardNumber.A, effect: SpecialCardEffect.Default, effectValue: 0, UrlImg: "./src/images/spades_ace.svg" },
@@ -60,4 +60,16 @@ export const Jokers: Joker[] = [
     {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Hearts},
     {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Diamonds},
     {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Spades},
+];
+
+export const Combos: Combo[] = [
+    {name: "straight flush", baseMult: 8, baseChips: 100},
+    {name: "four of a kind", baseMult: 7, baseChips: 60},
+    {name: "full house", baseMult: 4, baseChips: 40},
+    {name: "flush", baseMult: 4, baseChips: 35},
+    {name: "straight", baseMult: 4, baseChips: 30},
+    {name: "three of a kind", baseMult: 3, baseChips: 30},
+    {name: "two pair", baseMult: 2, baseChips: 20},
+    {name: "pair", baseMult: 2, baseChips: 10},
+    {name: "high card", baseMult: 1, baseChips: 5},
 ];

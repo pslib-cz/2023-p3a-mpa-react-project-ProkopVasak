@@ -36,9 +36,11 @@ export enum Condition {
     Clubs = "Clubs",
 }
 
-export enum actionType {Play}
+export enum actionType {
+    EVALUATE_CARDS = "EVALUATE_CARDS",
+}
 
-export type Action = |{type: actionType.Play , payload: {cards: Card[]} };
+export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] };
 
 
 export interface Card {
@@ -69,6 +71,12 @@ export interface Enemy {
 export interface State {
     player: Player;
     enemy: Enemy;
+}
+
+export interface Combo {
+    name: string;
+    baseMult: number;
+    baseChips: number;
 }
 
 export interface Stats {

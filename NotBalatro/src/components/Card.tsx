@@ -10,7 +10,8 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ card }) => {
     const { selectedCards,  setSelectedCards } = useContext(GameContext);
-
+    const isSelected = selectedCards.includes(card);
+    const cardClassName = isSelected ? `${styles.card} ${styles.selected}` : styles.card;
     const handleClick = () => {
         if (selectedCards.includes(card)) {
           setSelectedCards(selectedCards.filter(c => c.id !== card.id));
@@ -20,7 +21,7 @@ const Card: React.FC<CardProps> = ({ card }) => {
       };
 
     return (
-        <div className={styles.card} onClick={handleClick}>
+        <div className={cardClassName} onClick={handleClick}>
             <img className={styles.card__img} src={card.UrlImg} alt="card" />
         </div>
         

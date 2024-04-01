@@ -11,24 +11,24 @@ const initialState = {
     player: player,    
     enemy: enemy,
 };
-const [selectedCards, setSelectedCards] = useState<Card[]>([]);
+
+
 
 const reducer = (state: State, action: Action) => {
     switch (action.type) {
-        /*case SET_PLAYER:
-            return { ...state, player: action.payload };
-        case SET_ENEMY:
-            return { ...state, enemy: action.payload };*/
+        case "EVALUATE_CARDS":
+            return { ...state };
         default:
             return state;
     }
 };
 
-export const GameContext = createContext<{state: State, dispatch:React.Dispatch<any>,selectedCards: Card[] , setSelectedCards: React.Dispatch<any>}>({state: initialState, dispatch: () => null, selectedCards: [] , setSelectedCards: setSelectedCards});
+export const GameContext = createContext<{state: State, dispatch:React.Dispatch<any>,selectedCards: Card[] , setSelectedCards: React.Dispatch<any>}>({state: initialState, dispatch: () => null, selectedCards: [] , setSelectedCards: () => null});
 
 const GameContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
-
+    const [selectedCards, setSelectedCards] = useState<Card[]>([]);
+    
     return (
         <GameContext.Provider value={{ state, dispatch, selectedCards, setSelectedCards }}>
             {children}
