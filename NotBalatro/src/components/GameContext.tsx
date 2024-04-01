@@ -160,34 +160,34 @@ const reducer = (state: State, action: Action) => {
                     return "straight flush"
                 }
 
-                if(checkFourOfAKind()){
+                else if(checkFourOfAKind()){
                     return "four of a kind"
                 }
 
-                if (checkFullHouse()) {
+                else if (checkFullHouse()) {
                     return "full house"
                 }
 
-                if (checkFiveSameType()) {
+                else if (checkFiveSameType()) {
                     return "flush"
                 }
 
-                if (checkFiveConsecutiveOnes()) {
+                else if (checkFiveConsecutiveOnes()) {
                     return "straight"
                 }
 
-                if (checkThreeOfAKind()) {
+                else if (checkThreeOfAKind()) {
                     return "three of a kind"
                 }
 
-                if (checkTwoPairs()){
+                else if (checkTwoPairs()){
                     return "two pair"
                 }
 
-                if (checkPair()) {
+                else if (checkPair()) {
                     return "pair"
                 }
-                
+
                 return "high card";
                 
                 
@@ -196,7 +196,7 @@ const reducer = (state: State, action: Action) => {
                 console.log(card.value)
             })
             const combo: Combo =  Combos.find(c => c.name === getBestCombo(action.cards))!;
-            console.log(getBestCombo(action.cards))
+            console.log(combo.baseChips, combo.baseMult, combo.name)
             const newEnemyScore = state.enemy.score - (combo.baseMult * combo.baseChips);
             console.log((combo.baseChips))
             return {
