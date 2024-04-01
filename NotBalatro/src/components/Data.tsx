@@ -56,10 +56,10 @@ export const Pack: Card[] = [
 ];
 
 export const Jokers: Joker[] = [
-    {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Clubs},
-    {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Hearts},
-    {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Diamonds},
-    {effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Spades},
+    {id: 1, effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Clubs},
+    {id: 2, effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Hearts},
+    {id: 3, effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Diamonds},
+    {id: 4, effect: SpecialCardEffect.Mult, effectValue: 4, condition: Condition.Spades},
 ];
 
 export const Combos: Combo[] = [

@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { GameContext } from './GameContext';
 import styles from "./Board.module.css";
 import PlayingCard from "./Card.tsx"
+import PlayingJoker from "./Joker.tsx"
 import { Card } from "./types.tsx"
 import { actionType } from "./types.tsx"
 import useLocalStorage from './useLocalStorage';
@@ -25,6 +26,11 @@ const Board: React.FC = () => {
     const isButtonDisabled = selectedCards.length === 0;
     return (
         <div className={styles.board}>
+            <div className={styles.joker__panel}>
+                {state.player.jokers.map((joker) => (
+                    <PlayingJoker key={joker.id} joker={joker}></PlayingJoker>
+                ))}
+            </div>
             <div className={styles.sidepanel}>
                 <div>{state.enemy.score}</div>
             </div>

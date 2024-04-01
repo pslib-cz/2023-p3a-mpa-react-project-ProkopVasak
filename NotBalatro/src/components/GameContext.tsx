@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, createContext, useReducer, useState } from 'react';
-import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo } from './types';
-import { Pack, Combos } from "./Data";
+import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo, Condition } from './types';
+import { Pack, Combos, Jokers } from "./Data";
 
-const player: Player = { deck: Pack, jokers: [] };
+const player: Player = { deck: Pack, jokers: [Jokers[0], Jokers[1]] };
 const enemy: Enemy = { name: "Enemy", score: 300 };
 
 const initialState: State = {
@@ -105,10 +105,10 @@ const reducer = (state: State, action: Action): State => {
                 return false;
 
             }
-
+            const values: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+            const types: number[] = [0,0,0,0]
             const findCombo = (cards: Card[]) => {
-                const values: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0]
-                const types: number[] = [0,0,0,0]
+                
                 for (let i = 0; i < cards.length; i++) {
                     values[cards[i].value-1] += 1;
                     switch(cards[i].type){
@@ -145,13 +145,41 @@ const reducer = (state: State, action: Action): State => {
                 } else {
                     return Combos[8];
                 }
+            };
+            
+            const jokerMult = (card:Joker[]) => {
+                var jokerMult = 0;
+                for (var i = 0; i < state.player.jokers.length; i++) {
+                    if (card[i].condition === Condition.Spades) {
+                        for (var j = 0; j < types[0]; j++) {
+                            jokerMult += 4;
+                        }
+                    }
+                    if (card[i].condition === Condition.Hearts) {
+                        for (var j = 0; j < types[1]; j++) {
+                            jokerMult += 4;
+                        }
+                    }
+                    if (card[i].condition === Condition.Diamonds) {
+                        for (var j = 0; j < types[2]; j++) {
+                            jokerMult += 4;
+                        }
+                    }
+                    if (card[i].condition === Condition.Clubs) {
+                        for (var j = 0; j < types[3]; j++) {
+                            jokerMult += 4;
+                        }
+                    }
+                };
+                return jokerMult
             }
+            
 
             const playerCombo = findCombo(action.cards);
             console.log(playerCombo.name);
             return {
                 ...state,
-                enemy: { ...state.enemy, score: state.enemy.score - (playerCombo.baseChips * playerCombo.baseMult) }
+                enemy: { ...state.enemy, score: state.enemy.score - ((playerCombo.baseChips) * (playerCombo.baseMult + jokerMult(state.player.jokers))) }
             };
         default:
             return state;

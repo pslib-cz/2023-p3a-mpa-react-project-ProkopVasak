@@ -32,3 +32,14 @@
     right: 0;
     top: 200px;
 }
+
+.joker__panel{
+    background-color: yellow;
+    height: 25vh;
+    width: 68vw;
+    position: absolute;
+    top: 0;
+    right: 4%;
+    display: flex;
+    justify-content: space-between;
+}

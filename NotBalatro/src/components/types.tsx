@@ -53,6 +53,7 @@ export interface Card {
 }
 
 export interface Joker{
+    id: number;
     effect: SpecialCardEffect;
     effectValue: number;
     condition: Condition;
