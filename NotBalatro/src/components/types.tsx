@@ -7,7 +7,7 @@ export enum CardType {
 }
 
 export enum CardNumber {
-    A = 11,
+    A = 1,
     Two = 2,
     Three = 3,
     Four = 4,
@@ -17,9 +17,9 @@ export enum CardNumber {
     Eight = 8,
     Nine = 9,
     Ten = 10,
-    J = 10,
-    Q = 10,
-    K = 10,
+    J = 11,
+    Q = 12,
+    K = 13,
 
 }
 

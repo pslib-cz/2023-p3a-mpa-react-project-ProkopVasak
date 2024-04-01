@@ -1,223 +1,169 @@
-import React, { PropsWithChildren, createContext, useReducer } from 'react';
+import React, { PropsWithChildren, createContext, useReducer, useState } from 'react';
 import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo } from './types';
 import { Pack, Combos } from "./Data";
-import { useState } from 'react';
 
+const player: Player = { deck: Pack, jokers: [] };
+const enemy: Enemy = { name: "Enemy", score: 300 };
 
-const player: Player = ({ deck: Pack, jokers: [] });
-const enemy: Enemy = ({ name: "Enemy", score: 300 });
-
-const initialState = {
-    player: player,    
+const initialState: State = {
+    player: player,
     enemy: enemy,
 };
 
-
-
-const reducer = (state: State, action: Action) => {
+const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case "EVALUATE_CARDS":
-            //A,2,3,4,5,6,7,8,9,10,J,Q,K
-            const values: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0];
-            //spades,hearts,diamonds,clubs
-            const types: number[] = [0,0,0,0];
-            const getBestCombo = (cards: Card[] ) => {
-                cards.forEach(element => {
-                    switch (element.type) {
+            const checkStraightFlush = (value: number[], type: number[]) => {
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 1 && value[i + 1] === 1 && value[i + 2] === 1 && value[i + 3] === 1 && value[i + 4] === 1 && type.includes(5)) {
+                        return true;
+                    }
+                    
+                }
+                return false;
+            }
+            
+
+            const checkFourOfAKind = (value: number[]) => {
+                for (let i = 0; i < value.length ; i++) {
+                    if (value[i] === 4) {
+                        return true;
+                    }
+                    
+                }
+                return false;
+            }
+
+            const checkFullHouse = (value: number[]) => {
+                var three: boolean = false
+                var two: boolean = false
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 3) {
+                        three = true;
+                    }
+                    else if (value[i] === 2) {
+                        two = true;
+                    }
+                }
+                if (three === true && two === true) {
+                    return true;
+                }
+                else return false;
+            }
+
+            const checkFlush = (value: number[]) => {
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 5) {
+                        return true;
+                    }
+                    
+                }
+                return false;
+            }
+
+            const checkStraight = (value: number[]) => {
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 1 && value[i + 1] === 1 && value[i + 2] === 1 && value[i + 3] === 1 && value[i + 4] === 1) {
+                        return true;
+                    }
+                    
+                }
+                return false;
+            }
+
+            const checkThreeOfAKind = (value: number[]) => {
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 3) {
+                        return true;
+                    }
+                    
+                }
+                return false;
+            }
+
+            const checkTwoPairs = (value: number[]) => {
+                var pairs: number = 0;
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 2) {
+                        pairs += 1;
+                    }
+                }
+                if (pairs === 2) {
+                    return true;
+                }
+                else return false;
+
+            }
+
+            const checkPair = (value: number[]) => {
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] === 2) {
+                        return true;
+                    }
+                    
+                }
+                return false;
+
+            }
+
+            const findCombo = (cards: Card[]) => {
+                const values: number[] = [0,0,0,0,0,0,0,0,0,0,0,0,0]
+                const types: number[] = [0,0,0,0]
+                for (let i = 0; i < cards.length; i++) {
+                    values[cards[i].value-1] += 1;
+                    switch(cards[i].type){
                         case "Spades":
-                            types[0]++;
+                            types[0] += 1;
                             break;
                         case "Hearts":
-                            types[1]++;
+                            types[1] += 1;
                             break;
                         case "Diamonds":
-                            types[2]++;
+                            types[2] += 1;
                             break;
                         case "Clubs":
-                            types[3]++;
+                            types[3] += 1;
                             break;
-                    }   
-                    switch (element.value) {
-                        case CardNumber.A:
-                            values[0]++;
-                            break;
-                        case CardNumber.Two:
-                            values[1]++;
-                            break;
-                        case CardNumber.Three:
-                            values[2]++;
-                            break;
-                        case CardNumber.Four:
-                            values[3]++;
-                            break;
-                        case CardNumber.Five:
-                            values[4]++;
-                            break;
-                        case CardNumber.Six:
-                            values[5]++;
-                            break;
-                        case CardNumber.Seven:
-                            values[6]++;
-                            break;
-                        case CardNumber.Eight:
-                            values[7]++;
-                            break;
-                        case CardNumber.Nine:
-                            values[8]++;
-                            break;
-                        case CardNumber.Ten:
-                            values[9]++;
-                            break;
-                        case CardNumber.J:
-                            values[10]++;
-                            break;
-                        case CardNumber.Q:
-                            values[11]++;
-                            break;
-                        case CardNumber.K:
-                            values[12]++;
-                            break;
-                    } 
-
-                                                             
-                });
-                const checkFiveConsecutiveOnes = () => {
-                    let count = 0;
-                    for (let i = 0; i < values.length; i++) {
-                        if (values[i] === 1) {
-                            count++;
-                            if (count === 5) {
-                                return true;
-                            }
-                        } else {
-                            count = 0;
-                        }
                     }
-                    return false;
-                };
-                const checkFiveSameType = () => {
-                    types.forEach(element => {
-                        if (element === 5) {
-                            return true;
-                        }
-                    });
-                    return false;
                 }
-
-                const checkFourOfAKind = () => {
-                    for (let i = 0; i < values.length; i++) {
-                        if (values[i] === 4) {
-                            return true;
-                        }
-                    }
-                    return false;
+                if (checkStraightFlush(values, types)) {
+                    return Combos[0];
+                } else if (checkFourOfAKind(values)){
+                    return Combos[1];
+                } else if (checkFullHouse(values)){
+                    return Combos[2];
+                } else if (checkFlush(types)){
+                    return Combos[3];
+                } else if (checkStraight(values)){
+                    return Combos[4];
+                } else if (checkThreeOfAKind(values)){
+                    return Combos[5];
+                } else  if (checkTwoPairs(values)){
+                    return Combos[6];
+                } else if (checkPair(values)){
+                    return Combos[7];
+                } else {
+                    return Combos[8];
                 }
-
-                const checkFullHouse = () => {
-                    let three = false;
-                    let two = false;
-                    for (let i = 0; i < values.length; i++) {
-                        if (values[i] === 3) {
-                            three = true;
-                        }
-                        if (values[i] === 2) {
-                            two = true;
-                        }
-                    }
-                    if (three === true && two === true) {
-                        return true;
-                    } else { return false}
-                }
-
-                const checkThreeOfAKind = () => {
-                    for (let i = 0; i < values.length; i++) {
-                        if (values[i] === 3) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                const checkTwoPairs = () => {
-                    let pairs = 0;
-                    for (let i = 0; i < values.length; i++) {
-                        if (values[i] === 2) {
-                            pairs++;
-                        }
-                    }
-                    return pairs === 2;
-                }
-                const checkPair = () => {
-                    for (let i = 0; i < values.length; i++) {
-                        if (values[i] === 2) {
-                            return true;
-                        }
-                    }
-                    return false;
-                }
-
-                if(checkFiveConsecutiveOnes()&&checkFiveSameType()){
-                    return "straight flush"
-                }
-
-                else if(checkFourOfAKind()){
-                    return "four of a kind"
-                }
-
-                else if (checkFullHouse()) {
-                    return "full house"
-                }
-
-                else if (checkFiveSameType()) {
-                    return "flush"
-                }
-
-                else if (checkFiveConsecutiveOnes()) {
-                    return "straight"
-                }
-
-                else if (checkThreeOfAKind()) {
-                    return "three of a kind"
-                }
-
-                else if (checkTwoPairs()){
-                    return "two pair"
-                }
-
-                else if (checkPair()) {
-                    return "pair"
-                }
-
-                return "high card";
-                
-                
             }
-            action.cards.forEach(card => {
-                console.log(card.value)
-            })
-            const combo: Combo =  Combos.find(c => c.name === getBestCombo(action.cards))!;
-            console.log(combo.baseChips, combo.baseMult, combo.name)
-            const newEnemyScore = state.enemy.score - (combo.baseMult * combo.baseChips);
-            console.log((combo.baseChips))
+
+            const playerCombo = findCombo(action.cards);
+            console.log(playerCombo.name);
             return {
                 ...state,
-                enemy: {
-                    ...state.enemy,
-                    score: newEnemyScore
-                }
+                enemy: { ...state.enemy, score: state.enemy.score - (playerCombo.baseChips * playerCombo.baseMult) }
             };
-            
         default:
             return state;
     }
 };
 
-export const GameContext = createContext<{state: State, dispatch:React.Dispatch<any>,selectedCards: Card[] , setSelectedCards: React.Dispatch<any>}>({state: initialState, dispatch: () => null, selectedCards: [] , setSelectedCards: () => null});
+export const GameContext = createContext<{state: State, dispatch: React.Dispatch<Action>, selectedCards: Card[], setSelectedCards: React.Dispatch<React.SetStateAction<Card[]>>}>({ state: initialState, dispatch: () => null, selectedCards: [], setSelectedCards: () => null });
 
-const GameContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
+const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
-    
+
     return (
         <GameContext.Provider value={{ state, dispatch, selectedCards, setSelectedCards }}>
             {children}
