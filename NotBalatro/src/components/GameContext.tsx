@@ -1,17 +1,24 @@
 import React, { PropsWithChildren, createContext, useReducer, useState } from 'react';
 import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo, Condition } from './types';
-import { Pack, Combos, Jokers } from "./Data";
+import { Pack, Combos, Jokers, Enemies } from "./Data";
 
 const player: Player = { deck: Pack, jokers: [Jokers[0], Jokers[1]] };
-const enemy: Enemy = { name: "Enemy", score: 300 };
+const enemy: Enemy = Enemies[0];
 
 const initialState: State = {
     player: player,
     enemy: enemy,
+    rewards: false,
 };
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case "ADD_JOKER":
+            return {
+                ...state,
+                player: { ...state.player, jokers: [...state.player.jokers, action.joker] }
+            };
+        
         case "EVALUATE_CARDS":
             const checkStraightFlush = (value: number[], type: number[]) => {
                 for (let i = 0; i < value.length; i++) {
@@ -176,6 +183,7 @@ const reducer = (state: State, action: Action): State => {
             
 
             const playerCombo = findCombo(action.cards);
+            
             console.log(playerCombo.name);
             return {
                 ...state,

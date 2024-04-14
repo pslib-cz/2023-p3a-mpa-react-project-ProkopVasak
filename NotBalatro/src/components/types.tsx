@@ -38,9 +38,11 @@ export enum Condition {
 
 export enum actionType {
     EVALUATE_CARDS = "EVALUATE_CARDS",
+    ADD_JOKER = "ADD_JOKER",
 }
 
-export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] };
+export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] }
+                        |{type: actionType.ADD_JOKER, joker: Joker};
 
 
 export interface Card {
@@ -72,6 +74,7 @@ export interface Enemy {
 export interface State {
     player: Player;
     enemy: Enemy;
+    rewards: boolean;
 }
 
 export interface Combo {
