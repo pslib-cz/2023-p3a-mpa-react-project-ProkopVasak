@@ -39,10 +39,12 @@ export enum Condition {
 export enum actionType {
     EVALUATE_CARDS = "EVALUATE_CARDS",
     ADD_JOKER = "ADD_JOKER",
+    SET_ENEMY_SCORE = "SET_ENEMY_SCORE",
 }
 
 export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] }
-                        |{type: actionType.ADD_JOKER, joker: Joker};
+                        |{type: actionType.ADD_JOKER, joker: Joker} 
+                        | {type: actionType.SET_ENEMY_SCORE, score: number};
 
 
 export interface Card {

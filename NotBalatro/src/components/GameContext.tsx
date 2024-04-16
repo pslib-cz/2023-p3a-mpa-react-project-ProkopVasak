@@ -13,6 +13,11 @@ const initialState: State = {
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case "SET_ENEMY_SCORE":
+    return {
+        ...state,
+        enemy: { ...state.enemy, score: action.score }
+    };
         case "ADD_JOKER":
             return {
                 ...state,
@@ -184,7 +189,7 @@ const reducer = (state: State, action: Action): State => {
 
             const playerCombo = findCombo(action.cards);
             
-            console.log(playerCombo.name);
+            
             return {
                 ...state,
                 enemy: { ...state.enemy, score: state.enemy.score - ((playerCombo.baseChips) * (playerCombo.baseMult + jokerMult(state.player.jokers))) }
@@ -197,6 +202,7 @@ const reducer = (state: State, action: Action): State => {
 export const GameContext = createContext<{state: State, dispatch: React.Dispatch<Action>, selectedCards: Card[], setSelectedCards: React.Dispatch<React.SetStateAction<Card[]>>}>({ state: initialState, dispatch: () => null, selectedCards: [], setSelectedCards: () => null });
 
 const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
+    
     const [state, dispatch] = useReducer(reducer, initialState);
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
 
