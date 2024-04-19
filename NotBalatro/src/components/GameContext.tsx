@@ -1,23 +1,23 @@
-import React, { PropsWithChildren, createContext, useReducer, useState } from 'react';
-import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo, Condition } from './types';
+import React, { PropsWithChildren, createContext, useReducer, useState, useEffect } from 'react';
+import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo, Condition, actionType } from './types';
 import { Pack, Combos, Jokers, Enemies } from "./Data";
+import useLocalStorage from './useLocalStorage';
 
 const player: Player = { deck: Pack, jokers: [Jokers[0], Jokers[1]] };
-const enemy: Enemy = Enemies[0];
 
 const initialState: State = {
     player: player,
-    enemy: enemy,
+    enemy: Enemies[0],
     rewards: false,
 };
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
         case "SET_ENEMY_SCORE":
-    return {
-        ...state,
-        enemy: { ...state.enemy, score: action.score }
-    };
+            return {
+                ...state,
+                enemy: { ...state.enemy, score: action.score }
+            };
         case "ADD_JOKER":
             return {
                 ...state,
@@ -202,8 +202,17 @@ const reducer = (state: State, action: Action): State => {
 export const GameContext = createContext<{state: State, dispatch: React.Dispatch<Action>, selectedCards: Card[], setSelectedCards: React.Dispatch<React.SetStateAction<Card[]>>}>({ state: initialState, dispatch: () => null, selectedCards: [], setSelectedCards: () => null });
 
 const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
-    
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [enemyScore, setEnemyScore] = useLocalStorage<number>('enemyScore', initialState.enemy.score);
+    const [state, dispatch] = useReducer(reducer, {...initialState, enemy: {...initialState.enemy, score: enemyScore}});
+
+    useEffect(() => {
+        dispatch({ type: actionType.SET_ENEMY_SCORE, score: enemyScore });
+    }, [enemyScore]);
+
+    useEffect(() => {
+        setEnemyScore(state.enemy.score);
+    }, [state.enemy.score]);
+
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
 
     return (

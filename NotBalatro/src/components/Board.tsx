@@ -13,36 +13,8 @@ const Board: React.FC = () => {
 
     const [initialCards, setInitialCards] = useState<Card[]>([]);
     const [storedCards, setStoredCards] = useLocalStorage<Card[]>('cards', []);
-    const [storedEnemyScore, setStoredEnemyScore] = useLocalStorage<number>('enemyScore', state.enemy.score);
-    const [isInitialLoad, setIsInitialLoad] = useLocalStorage<boolean>('isInitialLoad', true);
-    useEffect(() => {
-        if (isInitialLoad) {
-            if (storedEnemyScore !== state.enemy.score) {
-                dispatch({ type: actionType.SET_ENEMY_SCORE, score: storedEnemyScore });
-            }
-            setIsInitialLoad(false);
-        }
-    }, [isInitialLoad, storedEnemyScore, state.enemy.score, dispatch, setIsInitialLoad]);
-
-    /*useEffect(() => {
-        if (storedEnemyScore !== undefined && storedEnemyScore !== state.enemy.score) {
-            dispatch({ type: actionType.SET_ENEMY_SCORE, score: storedEnemyScore });
-        }
-    }, []); 
-
-    useEffect(() => {
-        if (state.enemy.score !== storedEnemyScore) {
-            setStoredEnemyScore(state.enemy.score);
-        }
-    }, [state.enemy.score]);
-
-    // Načtení skóre z localStorage a aktualizace stavu pouze pokud se liší a není to první načtení
-    useEffect(() => {
-        if (!isInitialLoad && storedEnemyScore !== state.enemy.score) {
-            dispatch({ type: actionType.SET_ENEMY_SCORE, score: storedEnemyScore });
-        }
-        setIsInitialLoad(false);  // Označíme, že první načtení již proběhlo
-    }, [storedEnemyScore]);*/
+    
+    
 
     useEffect(() => {
         if (storedCards.length === 0) {
@@ -65,7 +37,7 @@ const Board: React.FC = () => {
                     ))}
                 </div>
                 <div className={styles.sidepanel}>
-                    <div>{storedEnemyScore}</div>
+                    <div>{state.enemy.score}</div>
                 </div>
                 <button className={styles.res} onClick={() => {
                     const newCards = state.player.deck.sort(() => Math.random() - 0.5).slice(0, 8);
