@@ -1,39 +1,55 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { GameContext } from './GameContext';
-import useLocalStorage from './useLocalStorage';
-import { Joker } from './types';
-import { Jokers } from "./Data";
+import { actionType, Joker } from './types'; // Ujistěte se, že máte správně definované typy
+import {Jokers} from "./Data";
+import styles from "./Rewards.module.css";
+import PlayingJoker from "./Joker.tsx"
 
-export const Rewards: React.FC = () => {
-    const { state } = useContext(GameContext);
-    const [storedJokers, setStoredJokers] = useLocalStorage<Joker[]>('jokers', []);
+const Rewards: React.FC = () => {
+    const { state, dispatch } = useContext(GameContext);
+    const [availableJokers, setAvailableJokers] = useState<Joker[]>([]);
+    const [selectedJokers, setSelectedJokers] = useState<Joker[]>([]);
 
-    const availableJokers = () => {
-        // Filtrujeme Jokers tak, aby neobsahovali jokery, které hráč již má
-        return Jokers.filter(joker => 
-            !state.player.jokers.some(playerJoker => playerJoker.id === joker.id) &&
-            !storedJokers.some(storedJoker => storedJoker.id === joker.id)
-        );
-    }
+    const handleSelectJoker = (joker: Joker) => {
+        dispatch({ type: actionType.ADD_JOKER_TO_PLAYER, joker });
+        dispatch({ type: actionType.SET_NEXT_ENEMY });
+    };
 
-    const [randomJokers, setRandomJokers] = useState<Joker[]>([]);
+    const handleSkipJoker = () => {
+        dispatch({ type: actionType.SET_NEXT_ENEMY });
+    };
 
     useEffect(() => {
-        const jokers = availableJokers();
-        // Zamícháme dostupné jokery
-        const shuffledJokers = jokers.sort(() => 0.5 - Math.random());
-        // Vybereme první dva z zamíchaného seznamu
-        setRandomJokers(shuffledJokers.slice(0, 2));
-    }, [state.player.jokers, storedJokers]); // Závislosti pro aktualizaci když se změní jokery hráče nebo uložené jokery
+        const filteredJokers = Jokers.filter(joker =>
+            !state.player.jokers.some(playerJoker => playerJoker.id === joker.id)
+        );
+
+        const shuffledJokers = filteredJokers.sort(() => 0.5 - Math.random()); // Zamíchání jokerů
+        setAvailableJokers(shuffledJokers.slice(0, 2)); // Výběr prvních dvou jokerů po zamíchání
+    }, [state.player.jokers]); // Dependence na jokery, které už má hráč
+
+    const handleRemoveJoker = (jokerId: number) => {
+        dispatch({ type: actionType.REMOVE_JOKER_FROM_PLAYER, jokerId });
+    };
 
     return (
         <div>
-            {randomJokers.map((joker, index) => (
-                <div key={index}>{joker.id} {joker.condition} {joker.effect} {joker.effectValue}</div> 
-
+            <div className={styles.joker__panel}>
+                    {state.player.jokers.map((joker) => (
+                        <div onClick={() => handleRemoveJoker(joker.id)}>
+                            <PlayingJoker  key={joker.id} joker={joker}></PlayingJoker>
+                        </div>
+                    ))}
+                </div>
+            <h2>Vyberte jednoho z následujících jokerů:</h2>
+            {availableJokers.map(joker => (
+                <div key={joker.id} onClick={() => handleSelectJoker(joker)}>
+                    {joker.id} - {joker.condition} - {joker.effect} - {joker.effectValue}
+                </div>
             ))}
+            <button onClick={handleSkipJoker}>Skip Joker Selection</button>
         </div>
     );
-}
+};
 
 export default Rewards;

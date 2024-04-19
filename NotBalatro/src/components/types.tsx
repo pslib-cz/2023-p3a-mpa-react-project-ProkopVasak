@@ -38,13 +38,17 @@ export enum Condition {
 
 export enum actionType {
     EVALUATE_CARDS = "EVALUATE_CARDS",
-    ADD_JOKER = "ADD_JOKER",
+    ADD_JOKER_TO_PLAYER = "ADD_JOKER_TO_PLAYER",
     SET_ENEMY_SCORE = "SET_ENEMY_SCORE",
+    SET_NEXT_ENEMY = "SET_NEXT_ENEMY",
+    REMOVE_JOKER_FROM_PLAYER = "REMOVE_JOKER_FROM_PLAYER",
 }
 
 export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] }
-                        |{type: actionType.ADD_JOKER, joker: Joker} 
-                        | {type: actionType.SET_ENEMY_SCORE, score: number};
+                        |{ type: actionType.ADD_JOKER_TO_PLAYER; joker: Joker }
+                        | {type: actionType.SET_ENEMY_SCORE, score: number}
+                        | { type: actionType.SET_NEXT_ENEMY}
+                        | { type: actionType.REMOVE_JOKER_FROM_PLAYER; jokerId: number };
 
 
 export interface Card {

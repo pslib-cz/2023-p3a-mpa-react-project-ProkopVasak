@@ -14,6 +14,10 @@ const Board: React.FC = () => {
     const [initialCards, setInitialCards] = useState<Card[]>([]);
     const [storedCards, setStoredCards] = useLocalStorage<Card[]>('cards', []);
     
+    const handleRemoveJoker = (jokerId: number) => {
+        dispatch({ type: actionType.REMOVE_JOKER_FROM_PLAYER, jokerId });
+    };
+
     
 
     useEffect(() => {
@@ -33,7 +37,9 @@ const Board: React.FC = () => {
             <div className={styles.board}>
                 <div className={styles.joker__panel}>
                     {state.player.jokers.map((joker) => (
-                        <PlayingJoker key={joker.id} joker={joker}></PlayingJoker>
+                        <div onClick={() => handleRemoveJoker(joker.id)}>
+                            <PlayingJoker  key={joker.id} joker={joker}></PlayingJoker>
+                        </div>
                     ))}
                 </div>
                 <div className={styles.sidepanel}>

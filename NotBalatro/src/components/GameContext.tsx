@@ -13,16 +13,35 @@ const initialState: State = {
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case 'REMOVE_JOKER_FROM_PLAYER':
+            return {
+                ...state,
+                player: {
+                    ...state.player,
+                    jokers: state.player.jokers.filter(joker => joker.id !== action.jokerId)
+                }
+            };
         case "SET_ENEMY_SCORE":
             return {
                 ...state,
                 enemy: { ...state.enemy, score: action.score }
             };
-        case "ADD_JOKER":
-            return {
-                ...state,
-                player: { ...state.player, jokers: [...state.player.jokers, action.joker] }
-            };
+            case "ADD_JOKER_TO_PLAYER":
+            if (!state.player.jokers.some(joker => joker.id === action.joker.id)) {
+                return {
+                    ...state,
+                    player: { ...state.player, jokers: [...state.player.jokers, action.joker] }
+                };
+            }
+            return state;
+                case "SET_NEXT_ENEMY":
+                    const currentEnemyIndex = Enemies.findIndex(enemy => enemy.name === state.enemy.name);
+                    const nextEnemyIndex = currentEnemyIndex + 1;
+                    const nextEnemy = Enemies[nextEnemyIndex] ? Enemies[nextEnemyIndex] : Enemies[0];  
+                    return {
+                        ...state,
+                        enemy: nextEnemy
+                    };
         
         case "EVALUATE_CARDS":
             const checkStraightFlush = (value: number[], type: number[]) => {
@@ -203,11 +222,16 @@ export const GameContext = createContext<{state: State, dispatch: React.Dispatch
 
 const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const [enemyScore, setEnemyScore] = useLocalStorage<number>('enemyScore', initialState.enemy.score);
-    const [state, dispatch] = useReducer(reducer, {...initialState, enemy: {...initialState.enemy, score: enemyScore}});
+    const [playerJokers, setPlayerJokers] = useLocalStorage<Joker[]>('playerJokers', initialState.player.jokers);
+    const [state, dispatch] = useReducer(reducer, {...initialState, player: { ...initialState.player, jokers: playerJokers }, enemy: {...initialState.enemy, score: enemyScore}});
 
     useEffect(() => {
         dispatch({ type: actionType.SET_ENEMY_SCORE, score: enemyScore });
     }, [enemyScore]);
+
+    useEffect(() => {
+        setPlayerJokers(state.player.jokers);
+    }, [state.player.jokers]);
 
     useEffect(() => {
         setEnemyScore(state.enemy.score);

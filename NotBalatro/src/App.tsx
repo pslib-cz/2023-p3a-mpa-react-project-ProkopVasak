@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      {state.enemy.score <= 0 ? <Rewards /> : <Board />}
+      {state.enemy.score <= 0 ? <Rewards/> : <Board />}
     </>
   )
 }
