@@ -28,16 +28,13 @@ const Rewards: React.FC = () => {
         setAvailableJokers(shuffledJokers.slice(0, 2)); // Výběr prvních dvou jokerů po zamíchání
     }, [state.player.jokers]); // Dependence na jokery, které už má hráč
 
-    const handleRemoveJoker = (jokerId: number) => {
-        dispatch({ type: actionType.REMOVE_JOKER_FROM_PLAYER, jokerId });
-    };
 
     return (
         <div>
             <div className={styles.joker__panel}>
                     {state.player.jokers.map((joker) => (
-                        <div onClick={() => handleRemoveJoker(joker.id)}>
-                            <PlayingJoker  key={joker.id} joker={joker}></PlayingJoker>
+                        <div>
+                            <PlayingJoker isDragging  key={joker.id} joker={joker}></PlayingJoker>
                         </div>
                     ))}
                 </div>

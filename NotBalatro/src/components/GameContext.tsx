@@ -9,10 +9,52 @@ const initialState: State = {
     player: player,
     enemy: Enemies[0],
     rewards: false,
+    currentCards: [],
+    selectedCards: [],
 };
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case 'SET_CURRENT_CARDS':
+            return {
+                ...state,
+                currentCards: action.cards
+            };
+        case 'TOGGLE_CARD_SELECTION':
+            const isCardSelected = state.selectedCards.some(card => card.id === action.card.id);
+            return {
+                ...state,
+                selectedCards: isCardSelected
+                    ? state.selectedCards.filter(card => card.id !== action.card.id)
+                    : [...state.selectedCards, action.card]
+            };
+        case 'LOAD_INITIAL_CARDS':
+            const initialCards = state.player.deck.sort(() => Math.random() - 0.5).slice(0, 8);
+            return {
+                ...state,
+                currentCards: initialCards,
+                player: {
+                    ...state.player,
+                    deck: state.player.deck.slice(8)  // Aktualizovat balíček odstraněním již vybraných karet
+                }
+            };
+        case "UPDATE_DECK":
+            return { ...state, player: {...state.player, deck: action.deck }};
+        case "SHUFFLE_DECK":
+      return { ...state, player: {...state.player , deck: state.player.deck.sort(() => Math.random() - 0.5) }};
+        case 'RESET_SELECTED_CARDS':
+            return {
+                ...state,
+                selectedCards: []
+            };
+        case 'UPDATE_JOKER_ORDER':
+            return {
+                ...state,
+                player: {
+                    ...state.player,
+                    jokers: action.jokers
+                }
+            };
         case 'REMOVE_JOKER_FROM_PLAYER':
             return {
                 ...state,
@@ -44,6 +86,7 @@ const reducer = (state: State, action: Action): State => {
                     };
         
         case "EVALUATE_CARDS":
+            
             const checkStraightFlush = (value: number[], type: number[]) => {
                 for (let i = 0; i < value.length; i++) {
                     if (value[i] === 1 && value[i + 1] === 1 && value[i + 2] === 1 && value[i + 3] === 1 && value[i + 4] === 1 && type.includes(5)) {
@@ -207,11 +250,16 @@ const reducer = (state: State, action: Action): State => {
             
 
             const playerCombo = findCombo(action.cards);
-            
+            const selectedCardIds = new Set(action.cards.map(card => card.id));
+            const remainingCards = state.currentCards.filter(card => !selectedCardIds.has(card.id));
+            const newCards = state.player.deck.slice(0, action.cards.length);
+            const newDeck = state.player.deck.slice(action.cards.length);
             
             return {
                 ...state,
-                enemy: { ...state.enemy, score: state.enemy.score - ((playerCombo.baseChips) * (playerCombo.baseMult + jokerMult(state.player.jokers))) }
+                enemy: { ...state.enemy, score: state.enemy.score - ((playerCombo.baseChips) * (playerCombo.baseMult + jokerMult(state.player.jokers))) },
+                currentCards: [...remainingCards, ...newCards],
+                player: { ...state.player, deck: newDeck }
             };
         default:
             return state;
@@ -224,6 +272,7 @@ const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const [enemyScore, setEnemyScore] = useLocalStorage<number>('enemyScore', initialState.enemy.score);
     const [playerJokers, setPlayerJokers] = useLocalStorage<Joker[]>('playerJokers', initialState.player.jokers);
     const [state, dispatch] = useReducer(reducer, {...initialState, player: { ...initialState.player, jokers: playerJokers }, enemy: {...initialState.enemy, score: enemyScore}});
+    const [storedCurrentCards, setStoredCurrentCards] = useLocalStorage<Card[]>('currentCards', []);
 
     useEffect(() => {
         dispatch({ type: actionType.SET_ENEMY_SCORE, score: enemyScore });
@@ -236,6 +285,19 @@ const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     useEffect(() => {
         setEnemyScore(state.enemy.score);
     }, [state.enemy.score]);
+
+    useEffect(() => {
+        if (storedCurrentCards.length > 0) {
+            dispatch({ type: actionType.SET_CURRENT_CARDS, cards: storedCurrentCards });
+        } else {
+            dispatch({ type: actionType.LOAD_INITIAL_CARDS });
+        }
+    }, []);
+
+    // Ukládání karet do localStorage při jejich změně
+    useEffect(() => {
+        setStoredCurrentCards(state.currentCards);
+    }, [state.currentCards]);
 
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
 

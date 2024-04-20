@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card as CardType } from './types';
+import { actionType, Card as CardType } from './types';
 import styles from "./Card.module.css";
 import { useContext } from 'react';
 import { GameContext } from './GameContext';
@@ -9,19 +9,15 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card }) => {
-    const { selectedCards,  setSelectedCards } = useContext(GameContext);
+    const { selectedCards,  setSelectedCards, dispatch } = useContext(GameContext);
     const isSelected = selectedCards.includes(card);
-    const cardClassName = isSelected ? `${styles.card} ${styles.selected}` : styles.card;
-    const handleClick = () => {
-        if (selectedCards.includes(card)) {
-          setSelectedCards(selectedCards.filter(c => c.id !== card.id));
-        } else if (selectedCards.length < 5) {
-          setSelectedCards([...selectedCards, card]);
-        }
-      };
+    
+      const toggleCardSelection = (card: CardType) => {
+        dispatch({ type: actionType.TOGGLE_CARD_SELECTION, card });
+    };
 
     return (
-        <div className={cardClassName} onClick={handleClick}>
+        <div className={`${styles.card} ${isSelected ? styles.selected : ''}`} onClick={() => toggleCardSelection(card)}>
             <img className={styles.card__img} src={card.UrlImg} alt="card" />
         </div>
         

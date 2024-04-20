@@ -42,4 +42,5 @@
     right: 4%;
     display: flex;
     justify-content: space-between;
+    flex-direction: row;
 }

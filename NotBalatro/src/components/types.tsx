@@ -42,13 +42,29 @@ export enum actionType {
     SET_ENEMY_SCORE = "SET_ENEMY_SCORE",
     SET_NEXT_ENEMY = "SET_NEXT_ENEMY",
     REMOVE_JOKER_FROM_PLAYER = "REMOVE_JOKER_FROM_PLAYER",
+    UPDATE_JOKER_ORDER = "UPDATE_JOKER_ORDER",
+    RESET_SELECTED_CARDS = "RESET_SELECTED_CARDS",
+    SHUFFLE_DECK = 'SHUFFLE_DECK',
+    UPDATE_DECK = 'UPDATE_DECK',
+    LOAD_INITIAL_CARDS = 'LOAD_INITIAL_CARDS',
+    TOGGLE_CARD_SELECTION = 'TOGGLE_CARD_SELECTION',
+    SET_CURRENT_CARDS = 'SET_CURRENT_CARDS',
+
 }
 
 export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] }
                         |{ type: actionType.ADD_JOKER_TO_PLAYER; joker: Joker }
                         | {type: actionType.SET_ENEMY_SCORE, score: number}
                         | { type: actionType.SET_NEXT_ENEMY}
-                        | { type: actionType.REMOVE_JOKER_FROM_PLAYER; jokerId: number };
+                        | { type: actionType.REMOVE_JOKER_FROM_PLAYER; jokerId: number }
+                        | { type: actionType.UPDATE_JOKER_ORDER; jokers: Joker[] }
+                        | { type: actionType.RESET_SELECTED_CARDS } 
+                        | { type: actionType.SHUFFLE_DECK } 
+                        | { type: actionType.UPDATE_DECK; deck: Card[] }
+                        | { type: actionType.LOAD_INITIAL_CARDS;} 
+                        | { type: actionType.TOGGLE_CARD_SELECTION; card: Card } 
+                        | { type: actionType.SET_CURRENT_CARDS; cards: Card[] }
+
 
 
 export interface Card {
@@ -81,6 +97,8 @@ export interface State {
     player: Player;
     enemy: Enemy;
     rewards: boolean;
+    currentCards: Card[];
+    selectedCards: Card[];
 }
 
 export interface Combo {
