@@ -18,7 +18,10 @@ const Card: React.FC<CardProps> = ({ card }) => {
 
     return (
         <div className={`${styles.card} ${isSelected ? styles.selected : ''}`} onClick={() => toggleCardSelection(card)}>
-            <img className={styles.card__img} src={card.UrlImg} alt="card" />
+            
+            <div className={styles.card__img} style={{
+                backgroundImage: "url(" + card.UrlImg + ")",
+            }}>.</div>
         </div>
         
         
