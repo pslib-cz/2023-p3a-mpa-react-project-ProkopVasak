@@ -53,6 +53,7 @@ export enum actionType {
     CHANGE_REWARDS = 'CHANGE_REWARDS',
     CHANGE_ATTEMPTS = 'CHANGE_ATTEMPTS',
     END = 'END',
+    RESET_GAME = 'RESET_GAME',
 
 }
 
@@ -72,6 +73,7 @@ export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] }
                         | { type: actionType.CHANGE_REWARDS, rew: boolean}
                         | { type: actionType.CHANGE_ATTEMPTS, eva: number, change: number}
                         | { type: actionType.END, end: boolean}
+                        | { type: actionType.RESET_GAME}
 
 
 

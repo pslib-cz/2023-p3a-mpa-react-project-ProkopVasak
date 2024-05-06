@@ -26,7 +26,17 @@ const Board: React.FC = () => {
       };
     
     if (state.gameOver) {
-        return (<div className={styles.over}><p>Game Over</p></div>);
+        return (
+            <div className={styles.over}>
+                <p>Game Over</p>
+                <button 
+                    className={styles.resetButton} 
+                    onClick={() => dispatch({ type: actionType.RESET_GAME })}
+                >
+                    Reset Game
+                </button>
+            </div>
+        );
     }else{
         return(
         <>

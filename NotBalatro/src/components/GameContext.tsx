@@ -18,6 +18,12 @@ const initialState: State = {
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case "RESET_GAME":
+            return {
+                ...initialState, // Reset the state to initial
+                player: {...initialState.player, deck: ([...Pack])}, 
+                enemy: Enemies[0], 
+            };
         case 'END':
             return {
                 ...state,
