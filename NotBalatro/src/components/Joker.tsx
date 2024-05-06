@@ -20,7 +20,7 @@ const Joker: React.FC<JokerProps> = ({ joker}) => {
         <div>
                 <div className={styles.joker}>
                     <div>
-                        <img src="./src/images/joker.svg" alt="joker" className={styles.joker__img} />
+                        <img src="./src/assets/images/joker.svg" alt="joker" className={styles.joker__img} />
                         <div>{joker.condition}</div>
                         <button onClick={() => handleRemoveJoker(joker.id)}>Remove</button>
                     </div>
