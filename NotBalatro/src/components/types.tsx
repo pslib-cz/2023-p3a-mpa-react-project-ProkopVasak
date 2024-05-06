@@ -49,6 +49,10 @@ export enum actionType {
     LOAD_INITIAL_CARDS = 'LOAD_INITIAL_CARDS',
     TOGGLE_CARD_SELECTION = 'TOGGLE_CARD_SELECTION',
     SET_CURRENT_CARDS = 'SET_CURRENT_CARDS',
+    CHANGE_SELECTED_CARDS = 'CHANGE_SELECTED_CARDS',
+    CHANGE_REWARDS = 'CHANGE_REWARDS',
+    CHANGE_ATTEMPTS = 'CHANGE_ATTEMPTS',
+    END = 'END',
 
 }
 
@@ -64,6 +68,10 @@ export type Action = |{type: actionType.EVALUATE_CARDS , cards: Card[] }
                         | { type: actionType.LOAD_INITIAL_CARDS;} 
                         | { type: actionType.TOGGLE_CARD_SELECTION; card: Card } 
                         | { type: actionType.SET_CURRENT_CARDS; cards: Card[] }
+                        | { type: actionType.CHANGE_SELECTED_CARDS; cards: Card[] }
+                        | { type: actionType.CHANGE_REWARDS, rew: boolean}
+                        | { type: actionType.CHANGE_ATTEMPTS, eva: number, change: number}
+                        | { type: actionType.END, end: boolean}
 
 
 
@@ -89,6 +97,7 @@ export interface Player {
 }
 
 export interface Enemy {
+    id: number;
     name: string;
     score: number;
 }
@@ -99,6 +108,9 @@ export interface State {
     rewards: boolean;
     currentCards: Card[];
     selectedCards: Card[];
+    attemptsLeft: number;
+    gameOver: boolean;
+    changeCardsAttemptsLeft: number;
 }
 
 export interface Combo {

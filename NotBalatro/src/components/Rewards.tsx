@@ -12,7 +12,7 @@ const Rewards: React.FC = () => {
 
     const handleSelectJoker = (joker: Joker) => {
         dispatch({ type: actionType.ADD_JOKER_TO_PLAYER, joker });
-        dispatch({ type: actionType.SET_NEXT_ENEMY });
+        dispatch({ type: actionType.CHANGE_REWARDS, rew: false});
     };
 
     const handleSkipJoker = () => {
@@ -34,7 +34,7 @@ const Rewards: React.FC = () => {
             <div className={styles.joker__panel}>
                     {state.player.jokers.map((joker) => (
                         <div>
-                            <PlayingJoker isDragging  key={joker.id} joker={joker}></PlayingJoker>
+                            <PlayingJoker  key={joker.id} joker={joker}></PlayingJoker>
                         </div>
                     ))}
                 </div>

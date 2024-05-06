@@ -74,12 +74,11 @@ export const Combos: Combo[] = [
     {name: "high card", baseMult: 1, baseChips: 5},
 ];
 export const Enemies: Enemy[] = [
-    {name: "Constantin", score: 300},
-    {name: "Vlad", score: 500},
-    {name: "Mihai", score: 700},
-    {name: "Andrei", score: 1000},
-    {name: "Alex", score: 1500},
-    {name: "George", score: 2000},
-    {name: "Marius", score: 2500},
-    
-]
+    { id: 1, name: "Constantin", score: 300 },
+    { id: 2, name: "Vlad", score: 500 },
+    { id: 3, name: "Mihai", score: 700 },
+    { id: 4, name: "Andrei", score: 1000 },
+    { id: 5, name: "Alex", score: 1500 },
+    { id: 6, name: "George", score: 2000 },
+    { id: 7, name: "Marius", score: 2500 },
+];

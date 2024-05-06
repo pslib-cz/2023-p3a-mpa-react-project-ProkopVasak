@@ -6,7 +6,6 @@ import PlayingJoker from "./Joker.tsx"
 import { Card } from "./types.tsx"
 import { actionType } from "./types.tsx"
 import useLocalStorage from './useLocalStorage';
-import { DragDropContext, Droppable, Draggable, DropResult  } from 'react-beautiful-dnd';
 import { Jokers } from './Data.tsx';
 
 const Board: React.FC = () => {
@@ -23,47 +22,37 @@ const Board: React.FC = () => {
     useEffect(() => {
         dispatch({ type: actionType.LOAD_INITIAL_CARDS });
     }, [dispatch]);
-
-    const onDragEnd = (result: DropResult) => {
-        const { destination, source } = result;
-        if (!destination || destination.droppableId === source.droppableId && destination.index === source.index) {
-            return;
-        }
-        const reorderedJokers = Array.from(state.player.jokers);
-        const [removed] = reorderedJokers.splice(source.index, 1);
-        reorderedJokers.splice(destination.index, 0, removed);
-        dispatch({ type: actionType.UPDATE_JOKER_ORDER, jokers: reorderedJokers });
-    };
-
-    return (
+    if (state.gameOver) {
+        return (<div>Game Over</div>);
+    }else{
+        return(
         <>
             <div className={styles.board}>
                 <div className={styles.joker__panel}>
-                    <DragDropContext onDragEnd={onDragEnd}>
-                        <Droppable droppableId="droppable-jokers">
-                            {(provided) => (
-                                <div {...provided.droppableProps} ref={provided.innerRef}>
-                                    {state.player.jokers.map((joker, index) => (
-                                        <Draggable key={joker.id} draggableId={String(joker.id)} index={index}>
-                                            {(provided, snapshot) => (
-                                                <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                                    <PlayingJoker joker={joker} isDragging={snapshot.isDragging} />
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
+                    {state.player.jokers.map((joker, index) => (
+                        <PlayingJoker key={joker.id} joker={joker}  />
+                    ))}
                 </div>
                 <div className={styles.sidepanel}>
                     <div>{state.enemy.score}</div>
                 </div>
-                <button className={styles.res} onClick={() => handleEvaluateCards()} disabled={selectedCards.length === 0}>
-                    Vyhodnotit karty
+                <button 
+                    className={styles.res} 
+                    onClick={handleEvaluateCards} 
+                    disabled={selectedCards.length === 0 || state.attemptsLeft <= 0}>
+                    Evaluate Cards
                 </button>
+                <div>Attempts left: {state.attemptsLeft}</div>
+                <button className={styles.button}
+                        onClick={() => dispatch({ type: actionType.CHANGE_SELECTED_CARDS, cards: selectedCards })}
+                        disabled={selectedCards.length === 0 || state.changeCardsAttemptsLeft <= 0}>
+                    Change Cards
+                </button>
+                {state.changeCardsAttemptsLeft > 0 ? (
+                <p>You can change cards {state.changeCardsAttemptsLeft} more times.</p>
+                ) : (
+                    <p>No more changes allowed.</p>
+                )}
                 <div className={styles.box}>
                 <div className={styles.card_box}>
                     {currentCards.map((card) => (
@@ -73,7 +62,9 @@ const Board: React.FC = () => {
                 </div>
             </div>
         </>
-    );
+        );
+    }
+    
 };
 
 export default Board;

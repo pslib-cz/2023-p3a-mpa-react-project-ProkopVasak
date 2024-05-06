@@ -3,7 +3,7 @@ import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo, Condition
 import { Pack, Combos, Jokers, Enemies } from "./Data";
 import useLocalStorage from './useLocalStorage';
 
-const player: Player = { deck: Pack, jokers: [Jokers[0], Jokers[1]] };
+const player: Player = { deck: Pack, jokers: [] };
 
 const initialState: State = {
     player: player,
@@ -11,10 +11,49 @@ const initialState: State = {
     rewards: false,
     currentCards: [],
     selectedCards: [],
+    attemptsLeft: 3,  // Add this line
+    gameOver: false,  // Add this line
+    changeCardsAttemptsLeft: 3,  // Přidáno
 };
 
 const reducer = (state: State, action: Action): State => {
     switch (action.type) {
+        case 'END':
+            return {
+                ...state,
+                gameOver: action.end
+            };
+        case 'CHANGE_ATTEMPTS':
+            return {
+                ...state,
+                attemptsLeft: action.eva,
+                changeCardsAttemptsLeft: action.change
+            }
+        case 'CHANGE_REWARDS':
+            return {
+                ...state,
+                rewards: action.rew
+            };
+        case "CHANGE_SELECTED_CARDS":
+            if (state.changeCardsAttemptsLeft > 0) {
+                const newCurrentCards = state.currentCards.filter(card => !state.selectedCards.includes(card));
+                const neededCardsCount = 8 - newCurrentCards.length;
+                const newDeckCards = state.player.deck.slice(0, neededCardsCount);
+                const remainingDeck = state.player.deck.slice(neededCardsCount);
+
+                return {
+                    ...state,
+                    currentCards: [...newCurrentCards, ...newDeckCards],
+                    player: { ...state.player, deck: remainingDeck },
+                    selectedCards: [],
+                    changeCardsAttemptsLeft: state.changeCardsAttemptsLeft - 1 // Snížení počtu pokusů
+                };
+            } else {
+                // Možné zobrazení zprávy nebo jiné akce, pokud nejsou pokusy k dispozici
+                return state;
+            }
+
+
         case 'SET_CURRENT_CARDS':
             return {
                 ...state,
@@ -68,7 +107,7 @@ const reducer = (state: State, action: Action): State => {
                 ...state,
                 enemy: { ...state.enemy, score: action.score }
             };
-            case "ADD_JOKER_TO_PLAYER":
+        case "ADD_JOKER_TO_PLAYER":
             if (!state.player.jokers.some(joker => joker.id === action.joker.id)) {
                 return {
                     ...state,
@@ -76,14 +115,17 @@ const reducer = (state: State, action: Action): State => {
                 };
             }
             return state;
-                case "SET_NEXT_ENEMY":
-                    const currentEnemyIndex = Enemies.findIndex(enemy => enemy.name === state.enemy.name);
-                    const nextEnemyIndex = currentEnemyIndex + 1;
-                    const nextEnemy = Enemies[nextEnemyIndex] ? Enemies[nextEnemyIndex] : Enemies[0];  
-                    return {
-                        ...state,
-                        enemy: nextEnemy
-                    };
+        case "SET_NEXT_ENEMY":
+            const sortedEnemies = [...Enemies].sort((a, b) => a.score - b.score);
+            const currentEnemyIndex = sortedEnemies.findIndex(enemy => enemy.id === state.enemy.id);
+            const nextEnemy = sortedEnemies[currentEnemyIndex + 1] || sortedEnemies[0]; // loop back if at the end
+            
+            return {
+                ...state,
+                enemy: nextEnemy
+            };
+            
+            
         
         case "EVALUATE_CARDS":
             
@@ -247,20 +289,69 @@ const reducer = (state: State, action: Action): State => {
                 };
                 return jokerMult
             }
+
+            const calculateValues = () => {
+                let value = 0;
+                for (let i = 0; i < action.cards.length; i++) {
+                    value += action.cards[i].value;
+                }
+                return value;
+            }
+
+            const shuffle = (array: Card[]) => {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]]; // ES6 swap
+                }
+            }
             
 
             const playerCombo = findCombo(action.cards);
-            const selectedCardIds = new Set(action.cards.map(card => card.id));
-            const remainingCards = state.currentCards.filter(card => !selectedCardIds.has(card.id));
-            const newCards = state.player.deck.slice(0, action.cards.length);
-            const newDeck = state.player.deck.slice(action.cards.length);
             
-            return {
-                ...state,
-                enemy: { ...state.enemy, score: state.enemy.score - ((playerCombo.baseChips) * (playerCombo.baseMult + jokerMult(state.player.jokers))) },
-                currentCards: [...remainingCards, ...newCards],
-                player: { ...state.player, deck: newDeck }
-            };
+            const handValue = calculateValues();
+            const newAttemptsLeft = state.attemptsLeft - 1;
+            const updatedDeck = [...state.player.deck, ...action.cards];
+            const remainingCurrentCards = state.currentCards.filter(card => !action.cards.find(ac => ac.id === card.id));
+            shuffle(updatedDeck);
+            const neededCards = 8 - remainingCurrentCards.length;
+            const newCards = updatedDeck.slice(0, neededCards);
+            const newRemainingDeck = updatedDeck.slice(neededCards);
+            
+            const totalImpact = playerCombo.baseChips + handValue;
+            const newEnemyScore = Math.max(0, state.enemy.score - (totalImpact * (playerCombo.baseMult + jokerMult(state.player.jokers))));
+            if (newEnemyScore === 0) {
+                // Enemy is defeated, move to next enemy and reset attempts
+                const nextEnemyIndex = (Enemies.findIndex(enemy => enemy.id === state.enemy.id) + 1) % Enemies.length;
+                return {
+                    ...state,
+                    enemy: Enemies[nextEnemyIndex],
+                    attemptsLeft: 3,
+                    currentCards: updatedDeck.slice(0, 8),
+                    selectedCards: [],
+                    player: {...state.player, deck: newRemainingDeck},
+                    rewards: true,
+                };
+            } else if (newAttemptsLeft <= 0) {
+                // No attempts left, game over
+                return {
+                    ...state,
+                    gameOver: true,
+                    attemptsLeft: 0,
+                    player: {...state.player, deck: updatedDeck},
+                    currentCards: [...remainingCurrentCards, ...newCards],
+                    selectedCards: [],
+                };
+            } else {
+                // Continue the game with the new state
+                return {
+                    ...state,
+                    enemy: {...state.enemy, score: newEnemyScore},
+                    attemptsLeft: newAttemptsLeft,
+                    currentCards: [...remainingCurrentCards, ...newCards],
+                    selectedCards: [],
+                    player: {...state.player, deck: newRemainingDeck},
+                };
+            }
         default:
             return state;
     }
@@ -270,9 +361,19 @@ export const GameContext = createContext<{state: State, dispatch: React.Dispatch
 
 const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const [enemyScore, setEnemyScore] = useLocalStorage<number>('enemyScore', initialState.enemy.score);
+    const [rewards, setRewards] = useLocalStorage<boolean>('rewards', initialState.rewards);
     const [playerJokers, setPlayerJokers] = useLocalStorage<Joker[]>('playerJokers', initialState.player.jokers);
     const [state, dispatch] = useReducer(reducer, {...initialState, player: { ...initialState.player, jokers: playerJokers }, enemy: {...initialState.enemy, score: enemyScore}});
     const [storedCurrentCards, setStoredCurrentCards] = useLocalStorage<Card[]>('currentCards', []);
+    const [attemptsLeft, setAttemptsLeft] = useLocalStorage('attemptsLeft', initialState.attemptsLeft);
+    const [changeCardsAttemptsLeft, setChangeCardsAttemptsLeft] = useLocalStorage('changeCardsAttemptsLeft', initialState.changeCardsAttemptsLeft);
+    const [gameOver, setGameOver] = useLocalStorage('gameOver', initialState.gameOver);
+
+     useEffect(() => {
+        setAttemptsLeft(state.attemptsLeft);
+        setChangeCardsAttemptsLeft(state.changeCardsAttemptsLeft);
+        setGameOver(state.gameOver); 
+    }, [state.attemptsLeft, state.changeCardsAttemptsLeft, state.gameOver]);
 
     useEffect(() => {
         dispatch({ type: actionType.SET_ENEMY_SCORE, score: enemyScore });
@@ -287,6 +388,9 @@ const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     }, [state.enemy.score]);
 
     useEffect(() => {
+        dispatch({ type: actionType.END, end: gameOver });
+        dispatch({ type: actionType.CHANGE_ATTEMPTS, eva: attemptsLeft, change: changeCardsAttemptsLeft });
+        dispatch({ type: actionType.CHANGE_REWARDS, rew: rewards });
         if (storedCurrentCards.length > 0) {
             dispatch({ type: actionType.SET_CURRENT_CARDS, cards: storedCurrentCards });
         } else {
@@ -299,6 +403,9 @@ const GameContextProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
         setStoredCurrentCards(state.currentCards);
     }, [state.currentCards]);
 
+    useEffect(() => {
+        setRewards(state.rewards);
+    }, [state.rewards]);
     const [selectedCards, setSelectedCards] = useState<Card[]>([]);
 
     return (
