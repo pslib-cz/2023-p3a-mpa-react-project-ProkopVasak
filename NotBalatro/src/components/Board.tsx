@@ -29,7 +29,7 @@ const Board: React.FC = () => {
       };
     
     if (state.gameOver) {
-        return (<div>Game Over</div>);
+        return (<div className={styles.over}><p>Game Over</p></div>);
     }else{
         return(
         <>
@@ -40,6 +40,17 @@ const Board: React.FC = () => {
                     <div className={styles.enemy__name}>Name: {state.enemy.name}</div>
                     <div className={styles.enemy__name}>Score: {state.enemy.score}</div>
                 </div>
+                <div className={styles.stats}>
+                    <div className={styles.stat} style={{backgroundColor:"red"}}>Evaluate: {state.attemptsLeft}</div>
+                    <div className={styles.stat} style={{backgroundColor:"blue"}}>Change: {state.changeCardsAttemptsLeft}</div>
+                </div>
+            </div>
+            
+            <div className={styles.sideMenu}>
+                    <h2 className={styles.enemy__header}>Current Enemy:</h2>
+                    <div className={styles.enemy__name}>Name: {state.enemy.name}</div>
+                    <div className={styles.enemy__name}>Score: {state.enemy.score}</div>
+                
                 <div className={styles.stats}>
                     <div className={styles.stat} style={{backgroundColor:"red"}}>Evaluate: {state.attemptsLeft}</div>
                     <div className={styles.stat} style={{backgroundColor:"blue"}}>Change: {state.changeCardsAttemptsLeft}</div>

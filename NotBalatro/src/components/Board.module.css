@@ -15,6 +15,14 @@
     color: white;
 }
 
+.sideMenu{
+    display: none;
+}
+
+.over{
+    font-size: 300%;
+
+}
 .menu{
     position: fixed;
     top: 0;
@@ -110,11 +118,44 @@
     grid-template-rows: 1fr;
     justify-items: center;
     align-items: center;
-    height: 40%;
+    height: 35%;
     width: 90%;
 }
 
 .board{
     height: 100%;
     width: 100%;
+}
+
+@media (min-width: 600px){
+    .box{
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 0.5fr 1fr ;
+        height: 40%;
+    }
+    .btn__box{
+        grid-row: 1;
+        grid-column: 1/9;
+    }
+}
+
+@media (min-width: 1000px){
+    .btn{
+        display: none;
+    }
+    .menu{
+        display: none;
+    }
+    .sideMenu{
+        display: grid;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #2856F7 ; 
+        padding: 20px;
+        border-radius: 15px;   
+    }
+    .joker__panel{
+        width: 50%;
+    }
 }

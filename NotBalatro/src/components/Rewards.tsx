@@ -30,22 +30,19 @@ const Rewards: React.FC = () => {
 
 
     return (
-        <div>
-            <div className={styles.joker__panel}>
-                    {state.player.jokers.map((joker) => (
-                        <div>
-                            <PlayingJoker  key={joker.id} joker={joker}></PlayingJoker>
+        <>
+            <div className={styles.rewards}>
+                <div className={styles.choose__box}>
+                    <h2>Select one of the following jokers:</h2>
+                    {availableJokers.map(joker => (
+                        <div className={styles.joker__btn} key={joker.id} onClick={() => handleSelectJoker(joker)}>
+                            {joker.condition}
                         </div>
                     ))}
+                    <button onClick={handleSkipJoker}>Skip Joker Selection</button>
                 </div>
-            <h2>Vyberte jednoho z následujících jokerů:</h2>
-            {availableJokers.map(joker => (
-                <div key={joker.id} onClick={() => handleSelectJoker(joker)}>
-                    {joker.id} - {joker.condition} - {joker.effect} - {joker.effectValue}
-                </div>
-            ))}
-            <button onClick={handleSkipJoker}>Skip Joker Selection</button>
-        </div>
+            </div>
+        </>
     );
 };
 
