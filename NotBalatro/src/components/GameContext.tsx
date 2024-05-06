@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, createContext, useReducer, useState, useEffect } from 'react';
-import { Player, Enemy, Card, Joker, State, Action, CardNumber, Combo, Condition, actionType } from './types';
-import { Pack, Combos, Jokers, Enemies } from "./Data";
+import { Player, Card, Joker, State, Action, Condition, actionType } from './types';
+import { Pack, Combos, Enemies } from "./Data";
 import useLocalStorage from './useLocalStorage';
 
 const player: Player = { deck: Pack, jokers: [] };

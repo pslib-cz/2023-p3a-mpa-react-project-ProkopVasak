@@ -1,7 +1,7 @@
-import { Player, Enemy, Card, Joker as JokerType, State, Action, CardNumber, Combo, actionType } from './types';
+import { Joker as JokerType, actionType } from './types';
 import styles from "./Joker.module.css";
 import { GameContext } from './GameContext';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
 interface JokerProps {
     joker: JokerType;

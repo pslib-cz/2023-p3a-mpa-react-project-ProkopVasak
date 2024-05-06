@@ -3,12 +3,10 @@ import { GameContext } from './GameContext';
 import { actionType, Joker } from './types'; // Ujistěte se, že máte správně definované typy
 import {Jokers} from "./Data";
 import styles from "./Rewards.module.css";
-import PlayingJoker from "./Joker.tsx"
 
 const Rewards: React.FC = () => {
     const { state, dispatch } = useContext(GameContext);
     const [availableJokers, setAvailableJokers] = useState<Joker[]>([]);
-    const [selectedJokers, setSelectedJokers] = useState<Joker[]>([]);
 
     const handleSelectJoker = (joker: Joker) => {
         dispatch({ type: actionType.ADD_JOKER_TO_PLAYER, joker });

@@ -9,7 +9,7 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card }) => {
-    const { selectedCards,  setSelectedCards, dispatch } = useContext(GameContext);
+    const { selectedCards, dispatch } = useContext(GameContext);
     const isSelected = selectedCards.includes(card);
     
       const toggleCardSelection = (card: CardType) => {

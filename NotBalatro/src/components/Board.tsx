@@ -3,10 +3,7 @@ import { GameContext } from './GameContext';
 import styles from "./Board.module.css";
 import PlayingCard from "./Card.tsx"
 import PlayingJoker from "./Joker.tsx"
-import { Card } from "./types.tsx"
 import { actionType } from "./types.tsx"
-import useLocalStorage from './useLocalStorage';
-import { Jokers } from './Data.tsx';
 
 const Board: React.FC = () => {
 
