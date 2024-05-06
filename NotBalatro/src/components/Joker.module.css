@@ -1,8 +1,10 @@
-.joker{
-    width: 200px;
+.joker__img{
     height: auto;
-    display: grid;
-    justify-content: center;
-    align-content: center;
-    background-color: black;
+    width: 100%;
+}
+
+.joker{
+    height: 100%;
+    width: 80%;
+    max-height: fit-content;
 }

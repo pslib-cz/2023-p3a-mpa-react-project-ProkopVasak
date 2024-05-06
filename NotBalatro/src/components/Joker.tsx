@@ -19,10 +19,12 @@ const Joker: React.FC<JokerProps> = ({ joker}) => {
         <>
         <div>
                 <div className={styles.joker}>
-                    <div>Mult: {joker.effectValue}</div>
-                    <div>Condition: {joker.condition}</div>
+                    <div>
+                        <img src="./src/images/joker.svg" alt="joker" className={styles.joker__img} />
+                        <div>{joker.condition}</div>
+                    </div>
                 </div>
-                <button onClick={() => handleRemoveJoker(joker.id)}> </button>
+                <button onClick={() => handleRemoveJoker(joker.id)}>Remove</button>
             </div>
             
             

@@ -1,16 +1,17 @@
-.card{
-    width: 100%;
-    height: auto;
-    display: grid;
-    justify-content: center;
-    align-content: center;
-}
-
 .card__img{
-    width: 100%;
     height: auto;
+    width: 90%;
 }
 
-.selected{
-    border: 10px solid blue !important;
+.card{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selected {
+    background-color: aquamarine;
+    border: 10px solid black !important;
 }
