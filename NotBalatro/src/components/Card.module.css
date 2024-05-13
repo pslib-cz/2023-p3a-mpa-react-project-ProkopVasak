@@ -13,6 +13,11 @@
 }
 
 .selected {
-    background-color: aquamarine;
-    border: 10px solid black !important;
+    border: 2px solid black !important;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }

@@ -43,6 +43,7 @@ const Board: React.FC = () => {
         <button className={styles.btn} onClick={toggleMenu}><div className={styles.btn__icon}>☰</div></button>
         <div  className={styles.menu} style={{height: isOpen ? '100vh' : '0',}}>
                 <div className={styles.enemy__box}>
+                    <a className={styles.guide} href="https://www.ign.com/wikis/balatro/Balatro_Tips_and_Tricks">?</a>
                     <h2 className={styles.enemy__header}>Current Enemy:</h2>
                     <div className={styles.enemy__name}>Name: {state.enemy.name}</div>
                     <div className={styles.enemy__name}>Score: {state.enemy.score}</div>
@@ -54,6 +55,7 @@ const Board: React.FC = () => {
             </div>
             
             <div className={styles.sideMenu}>
+                    <a className={styles.guide} href="https://www.ign.com/wikis/balatro/Balatro_Tips_and_Tricks">?</a>
                     <h2 className={styles.enemy__header}>Current Enemy:</h2>
                     <div className={styles.enemy__name}>Name: {state.enemy.name}</div>
                     <div className={styles.enemy__name}>Score: {state.enemy.score}</div>

@@ -9,21 +9,29 @@ interface CardProps {
 }
 
 const Card: React.FC<CardProps> = ({ card }) => {
-    const { selectedCards, dispatch } = useContext(GameContext);
-    const isSelected = selectedCards.includes(card);
+    const { state, dispatch } = useContext(GameContext);
+    const isSelected = state.selectedCards.some(selectedCard => selectedCard.id === card.id);
+
     
       const toggleCardSelection = (card: CardType) => {
         dispatch({ type: actionType.TOGGLE_CARD_SELECTION, card });
     };
 
-    return (
-        <div className={`${styles.card} ${isSelected ? styles.selected : ''}`} onClick={() => toggleCardSelection(card)}>
-            <img className={styles.card__img} src={card.UrlImg} alt="Card" />
-        </div>
-        
-        
+    if (!isSelected){
+        return (
+            <div className={styles.card} onClick={() => toggleCardSelection(card)}>
+                <img className={styles.card__img} src={card.UrlImg} alt="Card" />
+            </div>
+       );}
     
-);}
-
+    if (isSelected){
+        return (
+            <div className={styles.selected} onClick={() => toggleCardSelection(card)}>
+                <img className={styles.card__img} src={card.UrlImg} alt="Card" />
+            </div>
+        );
+    }
+    
+}
 export default Card;
 
