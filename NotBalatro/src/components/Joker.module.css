@@ -1,0 +1,10 @@
+.joker__img{
+    height: auto;
+    width: 100%;
+}
+
+.joker{
+    height: fit-content;
+    width: 80%;
+    max-height: fit-content;
+}

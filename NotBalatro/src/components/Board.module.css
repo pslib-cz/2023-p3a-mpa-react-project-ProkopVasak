@@ -1,0 +1,167 @@
+.btn{
+    position: fixed; /* Změněno z statického na fixed, aby tlačítko zůstalo na místě */
+    z-index: 1000; /* Zajišťuje, že tlačítko bude nad menu */
+    top: 10px; /* Umístění tlačítka */
+    right: 10px; /* Umístění tlačítka */
+    height: 60px;
+    width: 60px;
+    border-radius: 20px;
+    background-color: #2856F7 ;
+    color: white;
+}
+
+.btn__icon{
+    font-size: 25px;
+    color: white;
+}
+
+.sideMenu{
+    display: none;
+}
+
+.over{
+    font-size: 300%;
+
+}
+.menu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background-color: rgba(106,137,250,0.9);
+    overflow: hidden;
+    transition: height 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 500; 
+}
+
+.enemy__box{
+    background-color: #2856F7 ;
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid black;
+    width: 270px;
+}
+
+.enemy__header{
+    font-size: 30px;
+    font-weight: bold;
+    
+    color: white;
+}
+
+.enemy__name{
+    font-size: 20px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.stats{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 40px;
+    width: 310px;;
+}
+
+.stat{
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 15px;
+    font-size: 15px;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+    align-self: center;
+}
+
+.box{
+    overflow: auto;
+    box-sizing: border-box;
+    background-color: #25783C;
+    position: fixed;
+    bottom: 0;
+    height: 60%;
+    width: 100%;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 0.5fr 1fr 1fr ;
+    justify-items: center;
+    ;
+}
+
+.btn__box{
+    grid-row: 1;
+    grid-column: 1/5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.res{
+    background-color: red;
+}
+
+.button{
+    background-color: blue;
+}
+
+.joker__panel{
+    position: absolute;
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr  1fr;
+    grid-template-rows: 1fr;
+    justify-items: center;
+    align-items: center;
+    height: 35%;
+    width: 90%;
+}
+
+.board{
+    height: 100%;
+    width: 100%;
+}
+
+@media (min-width: 600px){
+    .box{
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 0.5fr 1fr ;
+        height: 40%;
+    }
+    .btn__box{
+        grid-row: 1;
+        grid-column: 1/9;
+    }
+}
+
+@media (min-width: 1000px){
+    .btn{
+        display: none;
+    }
+    .menu{
+        display: none;
+    }
+    .sideMenu{
+        display: grid;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #2856F7 ; 
+        padding: 20px;
+        border-radius: 15px;   
+    }
+    .joker__panel{
+        width: 50%;
+    }
+    .guide{
+        position:absolute;
+        top: 10px;
+        right: 10px;
+        color: white;
+    }
+}

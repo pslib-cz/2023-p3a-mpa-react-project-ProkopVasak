@@ -1,0 +1,40 @@
+.choose__box{
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    background-color: #2856F7 ;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+    border-radius: 15px;
+    margin: 0 auto;
+    width: fit-content;
+}
+
+.choose__box h2{
+    grid-column: span 2;
+}
+
+.choose__box button{
+    grid-column: span 2;
+}
+
+.joker__btn{
+    background-color:  rgba(106,137,250);
+    color: white;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.25s;
+}
+
+.rewards{
+    display: flex;
+    width: 100VW;
+    justify-content: center;
+    align-items: center;
+}

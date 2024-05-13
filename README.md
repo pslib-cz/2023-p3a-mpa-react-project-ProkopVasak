@@ -1,14 +1,13 @@
-# Název mého projektu, programu, hry...
+# [Balatro](https://store.steampowered.com/app/2379780/Balatro/)
 
 ## Téma
 
-Tady bude krátký a úderný popis o účelu, významu, funkcionalitě...
-
+Balatro je karetní hra, kde se pomocí comba snažíte porazit nepřítele. Combo se násobí pomocí bonusových karet Joker(Každý dává jiný efekt) a podle použitých karet(comba jsou stejná jako v pokeru). Každé kolo má 3 nepřátele a postupně se zvišuje obtížnost a každý třetí má speciální negativní efekt(např. že hráč má o 1 ruku na použití méně nebo třeba nemůže použít srdcové karty). Od samotné hry bych udělal několik změn, třeba nahradil shop odměnami po zabití nepřítele.
 ## Odkazy pro vývoj
 
 Zde budou živé linky na:
-- figma návrh stránek aplikace
-- odkaz na gh-pages projektu
+- [figma](https://www.figma.com/file/HQb08rEunsZfBK5DunHwZi/Balatro-projekt?type=design&node-id=0%3A1&mode=design&t=KB173ozSjgnmOpf6-1) návrh stránek aplikace
+- odkaz na [gh-pages](https://pslib-cz.github.io/2023-p3a-mpa-react-project-ProkopVasak/) projektu
 - odkaz do repozitáře projektu, pokud pracuji v teamu a zde vývoj neprobíhá
 
 ### Z čeho čerpat

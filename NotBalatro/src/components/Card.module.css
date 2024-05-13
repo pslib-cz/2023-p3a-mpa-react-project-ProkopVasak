@@ -1,0 +1,23 @@
+.card__img{
+    height: auto;
+    width: 90%;
+}
+
+.card{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.selected {
+    border: 2px solid black !important;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
